@@ -1,4 +1,83 @@
-$max-page-width: 1200px;
+$amount: 6;
+
+@mixin grid-item($amount) {
+  @for $i from 1 through $amount {
+    &:nth-of-type(#{$amount}n + #{$i}) {
+      grid-column: #{$i + $i - 1} / span 3;
+      @if $i % 2 == 0 {
+        grid-row: calc(var(--counter) + var(--counter) - 1) / span 2;
+      }
+    }
+  }
+
+  @for $i from 1 through 20 {
+    &:nth-of-type(n + #{$i * $amount + 1}) {
+      --counter: #{$i + 1};
+    }
+  }
+}
+
+
+.hex-grid__list {
+    --amount: 6;
+    --counter: 1;
+    display: grid;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: repeat(var(--amount), 1fr 2fr) 1fr;
+    grid-gap: 1rem 2rem;
+}
+
+.hex-grid__item {
+    position: relative;
+    grid-column: 1 / span 3;
+    grid-row: calc(var(--counter) + var(--counter)) / span 2;
+    height: 0;
+    padding-bottom: 90%;
+    font-size: 100%;
+    @media(min-width: 900px) {
+      font-size: 70px;
+    }
+
+    // Columns
+    @for $i from 1 through $amount {
+        &:nth-of-type(#{$amount}n + #{$i}) {
+            grid-column: #{$i + $i - 1} / span 3;
+            @if $i % 2 == 0 {
+                grid-row: calc(var(--counter) + var(--counter) - 1) / span 2;
+            }
+        }
+    }
+
+    // Rows
+    @for $i from 1 through 20 {
+        &:nth-of-type(n + #{$i * $amount + 1}) {
+            --counter: #{$i + 1};
+        }
+    }
+}
+
+.hex-grid__content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: white;
+    height: 100%;
+    width: 100%;
+    background-color: #1f1f1f;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
+}
+
+.hex-grid__item:nth-of-type(2n) {
+  .hex-grid__content {
+    // background-color: grey;
+  }
+}
+;$max-page-width: 1200px;
 $mobile-break-point: 700px;
 
 *, *:before, *:after {
@@ -500,8 +579,11 @@ $mobile-break-point: 700px;
     text-align: center;
     text-transform: uppercase;
     color: white;
-    font-size: 10vw;
+    font-size: 6vw;
     padding-top: 20px;
+    @media(max-width: 800px) {
+      font-size: 10vw;
+    }
     .portfolio-name__job {
         font-size: 22px;
         text-transform: none;
@@ -546,7 +628,7 @@ $mobile-break-point: 700px;
           font-weight: 300;
           font-size: 40px;
           text-align: center;
-          padding-bottom: 1rem;
+          padding-bottom: 2rem;
           &::after {
             content: ' ';
             display: block;
@@ -561,13 +643,17 @@ $mobile-break-point: 700px;
             form {
                 display: flex;
                 flex-direction: column;
-                max-width: 500px;
                 margin: 30px auto;
                 input, textarea {
                     border: none;
+                    background-color: #1f1f1f;
+                    color: white;
                     border-radius: 5px;
                     padding: 10px;
                     margin: 0 0 10px 0;
+                    &::placeholder {
+                      color: #2B4B6F;
+                    }
                 }
                 textarea {
                     height: 100px;
@@ -594,7 +680,7 @@ $mobile-break-point: 700px;
   text-transform: uppercase;
   font-weight: 300;
   text-align: center;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
   &::after {
     content: ' ';
     display: block;
@@ -630,6 +716,11 @@ $mobile-break-point: 700px;
       }
     }
     &.project--idwa {
+      .project__image {
+        background-size: 50%;
+      }
+    }
+    &.project--krue {
       .project__image {
         background-size: 50%;
       }
@@ -736,6 +827,7 @@ $mobile-break-point: 700px;
       }
     }
   }
+  
   .about__skills {
     .bullet {
       color: #73612c;
